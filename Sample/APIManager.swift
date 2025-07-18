@@ -32,7 +32,7 @@ final class APIManager {
         config.allowsCellularAccess = true
         let session = URLSession(configuration: config)
 
-        let endPoint: String = serverUrl + "/check"
+        let endPoint: String = serverUrl + "/phone-check"
         print("postCheck: \(endPoint)")
 
         let url = URL(string: endPoint)!
@@ -73,17 +73,28 @@ final class APIManager {
     func getCheckStatus(withCheckId id:String, completionHandler: @escaping (CheckStatus) -> Void) {
         let config = URLSessionConfiguration.default
         config.waitsForConnectivity = true
-        config.timeoutIntervalForResource = 300
+        config.timeoutIntervalForResource = 40
         let session = URLSession(configuration: config)
-        let endPoint: String = serverUrl + "/check_status?check_id=\(id)"
+        
+        // v0.1
+         let endPoint: String = serverUrl + "/phone-check?check_id=\(id)"
+        
+        // v0.2
+        // let endPoint: String = serverUrl + "/phone-check/exchange-code"
         
         print("getCheckStatus: \(endPoint)")
 
         if let url = URL(string: endPoint) {
               print(url)
+              // create payload (v0.2)
+              // let json: [String: Any] = ["check_id": id, "code": code]
+              // let jsonData = try? JSONSerialization.data(withJSONObject: json)
+            
               // create Request
               var request = URLRequest(url: url)
               request.httpMethod = "GET"
+              // request.httpBody = jsonData
+              // request.setValue("application/json", forHTTPHeaderField: "content-type")
               let task = session.dataTask(with: request) { (data, response, error) in
                 if let error = error {
                   print("Error returning id \(id): \(error)")
