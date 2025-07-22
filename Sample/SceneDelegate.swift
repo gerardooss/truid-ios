@@ -14,6 +14,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let contentView = ContentView()  // Your SwiftUI View
 
         let window = UIWindow(windowScene: windowScene)
+        
+        // Force Light Mode
+        window.overrideUserInterfaceStyle = .light
+        
         window.rootViewController = UIHostingController(rootView: contentView)
         self.window = window
         window.makeKeyAndVisible()

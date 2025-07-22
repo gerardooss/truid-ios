@@ -1,5 +1,5 @@
 //
-//  CheckResultComponent.swift
+//  ResultView.swift
 //  Sample
 //
 //  Created by Hendrik Nicolas Carlo on 21/07/25.
@@ -8,8 +8,8 @@
 
 import SwiftUI
 
-struct CheckResultComponent: View {
-    let isSuccess: Bool = false
+struct ResultView: View {
+    let isSuccess: Bool
     
     var body: some View {
         VStack(spacing:20){
@@ -28,8 +28,4 @@ struct CheckResultComponent: View {
             }.padding(.horizontal, 30)
         }
     }
-}
-
-#Preview {
-    CheckResultComponent()
 }
