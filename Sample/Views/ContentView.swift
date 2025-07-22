@@ -36,6 +36,7 @@ struct ContentView: View {
                                 .font(.system(size: 20, weight: .semibold))
                             Text("Pastikan kamu pakai kartu SIM yang didaftarkan, dan nyalakan data seluler ya, Easy Frens!")
                                 .font(.system(size: 13))
+                                .foregroundColor(.gray)
                         }
                         
                         // Phone number field bound to ViewModel
@@ -69,11 +70,13 @@ struct ContentView: View {
                                 CheckBoxComponent(isSelected: $viewModel.termsAccepted)
                                 Text("I have read and agreed to the Privacy Policy, Terms of Use and Authorization Letter from Easycash.")
                                     .font(.system(size: 11))
+                                    .foregroundColor(.gray)
                             }
                             HStack {
                                 CheckBoxComponent(isSelected: $viewModel.promotionsAccepted)
                                 Text("I agree to receive promotional information from Easycash.")
                                     .font(.system(size: 11))
+                                    .foregroundColor(.gray)
                             }
                         }
                     }
