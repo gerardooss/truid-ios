@@ -12,6 +12,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject private var viewModel = ContentViewModel()
     @State private var shouldNavigateToResult = false
+    @State private var isShowingCellularModal = false
     
     var body: some View {
         NavigationStack {
@@ -20,10 +21,10 @@ struct ContentView: View {
                     // MARK: - Header
                     HStack {
                         Spacer()
-                        Image("EasyCashLogo") // Assumes image is in Assets
+                        Image("EasyCashLogo")
                             .resizable().scaledToFit().frame(height: 30)
                         Spacer()
-                        Image("Customer-Service") // Assumes image is in Assets
+                        Image("Customer-Service")
                             .resizable().scaledToFit().frame(height: 30)
                     }
                     .padding(.horizontal)
@@ -38,22 +39,21 @@ struct ContentView: View {
                                 .font(.system(size: 13))
                                 .foregroundColor(.gray)
                         }
-                        
-                        // Phone number field bound to ViewModel
+
                         HStack {
-                            Image(systemName: "phone.fill").foregroundColor(.gray)
+                            Image(systemName: "phone.fill").foregroundColor(Color("AppSecondaryColor"))
                             TextField("08xx xxxx xxxx", text: $viewModel.phoneNumber)
                                 .keyboardType(.phonePad)
                         }
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 8)
-                                .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                                .stroke(Color("AppSecondaryColor").opacity(0.5), lineWidth: 1)
                         )
                         
                         // 'Lanjut' Button
                         Button(action: {
-                            viewModel.performPhoneCheck()
+                            isShowingCellularModal = true
                         }) {
                             Text("Lanjut")
                                 .font(.system(size: 16, weight: .bold))
@@ -64,19 +64,28 @@ struct ContentView: View {
                         .background(viewModel.isContinueButtonEnabled ? Color("AppPrimaryColor") : Color("AppSecondaryColor"))
                         .cornerRadius(10)
                         .disabled(!viewModel.isContinueButtonEnabled)
+                        .sheet(isPresented: $isShowingCellularModal) {
+                            CelularModalView(
+                                phoneNumber: viewModel.phoneNumber,
+                                onContinue: {
+                                    viewModel.performPhoneCheck()
+                                }
+                            )
+                            .presentationDetents([.medium])
+                        }
                         
                         VStack(alignment: .leading, spacing: 10) {
                             HStack {
                                 CheckBoxComponent(isSelected: $viewModel.termsAccepted)
                                 Text("I have read and agreed to the Privacy Policy, Terms of Use and Authorization Letter from Easycash.")
                                     .font(.system(size: 11))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(Color("AppSecondaryColor"))
                             }
                             HStack {
                                 CheckBoxComponent(isSelected: $viewModel.promotionsAccepted)
                                 Text("I agree to receive promotional information from Easycash.")
                                     .font(.system(size: 11))
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(Color("AppSecondaryColor"))
                             }
                         }
                     }

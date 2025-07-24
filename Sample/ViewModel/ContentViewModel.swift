@@ -48,22 +48,27 @@ final class ContentViewModel: ObservableObject {
             switch result {
             case .success(let checkResponse):
                 // Step 2: Open the check_url with the TruSDK
+                // This call will eventually lead to a main thread update
                 self.openCheckURL(checkResponse)
             case .failure(_):
                 // Handle API error
-                self.isLoading = false
-                self.checkResult = false
+                // **FIX:** Ensure UI updates are on the main thread.
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                    self.checkResult = false
+                }
             }
         }
     }
     
     private func openCheckURL(_ check: APIManager.Check) {
+        // The tru.ID SDK handles its own threading, the completion gives us control back.
         truSdk.checkUrlWithResponseBody(url: URL(string: check.url)!) { [weak self] _, _ in
             guard let self = self else { return }
             
             // Step 3: Get the final result from your server
             self.apiManager.getCheckStatus(withCheckId: check.id) { status in
-                // Update state on the main thread
+                // Update state on the main thread (This part was already correct)
                 DispatchQueue.main.async {
                     self.isLoading = false
                     self.checkResult = status.match

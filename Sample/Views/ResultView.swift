@@ -12,20 +12,36 @@ struct ResultView: View {
     let isSuccess: Bool
     
     var body: some View {
-        VStack(spacing:20){
-            Image(isSuccess ? "SNA_Success": "SNA_Failed")
-                .resizable()
-                .frame(width: 158, height: 179)
-                .scaledToFit()
+        ZStack {
+            LinearGradient(
+                        gradient: Gradient(colors: [Color("AppGradationColor"), .white]),
+                        startPoint: .top,
+                        endPoint: .center
+                    )
+                    .ignoresSafeArea()
             
-            VStack (spacing: 10){
-                Text(isSuccess ? "Nomor HP berhasil terverifikasi!" : "Verifikasi tidak berhasil")
-                    .font(.system(size: 20, weight: .bold, design: .default))
-                Text(isSuccess ? "Sekarang, lanjut ke verifikasi data diri (KYC)." : "Butuh bantuan? Hubungi call center untuk verifikasi dan atur ulang kata sandi.")
-                    .font(.system(size: 16, weight: .regular, design: .default))
-                    .multilineTextAlignment(.center)
+            VStack(spacing:20){
+                Image(isSuccess ? "SNA_Success": "SNA_Failed")
+                    .resizable()
+                    .frame(width: 250, height: 250)
+                    .scaledToFit()
                 
-            }.padding(.horizontal, 30)
+                VStack (spacing: 10){
+                    Text(isSuccess ? "Nomor HP berhasil terverifikasi!" : "Verifikasi tidak berhasil")
+                        .font(.system(size: 20, weight: .bold, design: .default))
+                    Text(isSuccess ? "Sekarang, lanjut ke verifikasi data diri (KYC)." : "Butuh bantuan? Hubungi call center untuk verifikasi dan atur ulang kata sandi.")
+                        .font(.system(size: 16, weight: .regular, design: .default))
+                        .multilineTextAlignment(.center)
+                    
+                }.padding(.horizontal, 30)
+            }
         }
     }
+}
+
+#Preview {
+    ResultView(isSuccess: true)
+}
+#Preview {
+    ResultView(isSuccess: false)
 }
